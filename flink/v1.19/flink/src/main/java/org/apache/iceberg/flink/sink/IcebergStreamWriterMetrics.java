@@ -27,6 +27,7 @@ import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.Histogram;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.iceberg.io.WriteResult;
+import org.apache.iceberg.util.ScanTaskUtil;
 
 @Internal
 public class IcebergStreamWriterMetrics {
@@ -81,7 +82,7 @@ public class IcebergStreamWriterMetrics {
     Arrays.stream(result.deleteFiles())
         .forEach(
             deleteFile -> {
-              deleteFilesSizeHistogram.update(deleteFile.fileSizeInBytes());
+              deleteFilesSizeHistogram.update(ScanTaskUtil.contentSizeInBytes(deleteFile));
             });
   }
 
