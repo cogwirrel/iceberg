@@ -24,7 +24,7 @@ import org.apache.flink.streaming.api.connector.sink2.CommittableMessage;
 import org.apache.flink.streaming.api.connector.sink2.CommittableWithLineage;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.streaming.util.OneInputStreamOperatorTestHarness;
-import org.apache.hadoop.util.Sets;
+import org.apache.iceberg.relocated.com.google.common.collect.Sets;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.HadoopCatalogExtension;
@@ -58,12 +58,12 @@ class TestDynamicWriteResultAggregator {
           new DynamicWriteResult(writeTarget2, WriteResult.builder().build());
 
       CommittableWithLineage<DynamicWriteResult> committable1 =
-          new CommittableWithLineage<>(dynamicWriteResult1, 0, 0);
+          new CommittableWithLineage<>(dynamicWriteResult1, 0L, 0);
       StreamRecord<CommittableMessage<DynamicWriteResult>> record1 =
           new StreamRecord<>(committable1);
       testHarness.processElement(record1);
       CommittableWithLineage<DynamicWriteResult> committable2 =
-          new CommittableWithLineage<>(dynamicWriteResult2, 0, 0);
+          new CommittableWithLineage<>(dynamicWriteResult2, 0L, 0);
       StreamRecord<CommittableMessage<DynamicWriteResult>> record2 =
           new StreamRecord<>(committable2);
       testHarness.processElement(record2);

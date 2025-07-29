@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 import org.apache.flink.core.memory.DataInputView;
 import org.apache.flink.core.memory.DataOutputView;
-import org.apache.hadoop.util.Sets;
+import org.apache.iceberg.relocated.com.google.common.collect.Sets;
 import org.apache.iceberg.relocated.com.google.common.base.MoreObjects;
 
 class WriteTarget implements Serializable {

@@ -281,6 +281,12 @@ public abstract class BaseMetastoreTableOperations extends BaseMetastoreOperatio
     };
   }
 
+  public enum CommitStatus {
+    FAILURE,
+    SUCCESS,
+    UNKNOWN
+  }
+
   /**
    * Attempt to load the table and see if any current or past metadata location matches the one we
    * were attempting to set. This is used as a last resort when we are dealing with exceptions that

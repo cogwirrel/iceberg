@@ -24,6 +24,7 @@ import java.util.NavigableMap;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.flink.annotation.Internal;
 import org.apache.iceberg.io.WriteResult;
+import org.apache.iceberg.util.ScanTaskUtil;
 import org.apache.iceberg.relocated.com.google.common.base.MoreObjects;
 
 @Internal

@@ -20,7 +20,7 @@ package org.apache.iceberg.flink.sink.dynamic;
 
 import java.util.Collections;
 import java.util.Set;
-import org.apache.hadoop.util.Sets;
+import org.apache.iceberg.relocated.com.google.common.collect.Sets;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.relocated.com.google.common.base.Preconditions;
 import org.apache.iceberg.types.Types;
