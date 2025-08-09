@@ -52,22 +52,17 @@ public class CommitSummary {
     dataFilesCount.addAndGet(writeResult.dataFiles().length);
     Arrays.stream(writeResult.dataFiles())
         .forEach(
-            writeResult -> {
-              dataFilesCount.addAndGet(writeResult.dataFiles().length);
-              Arrays.stream(writeResult.dataFiles())
-                  .forEach(
-                      dataFile -> {
-                        dataFilesRecordCount.addAndGet(dataFile.recordCount());
-                        dataFilesByteCount.addAndGet(dataFile.fileSizeInBytes());
-                      });
-              deleteFilesCount.addAndGet(writeResult.deleteFiles().length);
-              Arrays.stream(writeResult.deleteFiles())
-                  .forEach(
-                      deleteFile -> {
-                        deleteFilesRecordCount.addAndGet(deleteFile.recordCount());
-                        long deleteBytes = ScanTaskUtil.contentSizeInBytes(deleteFile);
-                        deleteFilesByteCount.addAndGet(deleteBytes);
-                      });
+            dataFile -> {
+              dataFilesRecordCount.addAndGet(dataFile.recordCount());
+              dataFilesByteCount.addAndGet(dataFile.fileSizeInBytes());
+            });
+    deleteFilesCount.addAndGet(writeResult.deleteFiles().length);
+    Arrays.stream(writeResult.deleteFiles())
+        .forEach(
+            deleteFile -> {
+              deleteFilesRecordCount.addAndGet(deleteFile.recordCount());
+              long deleteBytes = ScanTaskUtil.contentSizeInBytes(deleteFile);
+              deleteFilesByteCount.addAndGet(deleteBytes);
             });
   }
 
