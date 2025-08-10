@@ -136,14 +136,32 @@ class TableUpdater {
             Tuple2<Schema, CompareSchemasVisitor.Result> comparisonAfterMigration =
                 cache.schema(identifier, schema);
             Schema newSchema = comparisonAfterMigration.f0;
+
+            // CRITICAL FIX: Validate schema is not null after evolution
+            if (newSchema == null) {
+              LOG.error("CRITICAL: Schema evolution succeeded but cache returned null schema for table {}. Using table's current schema as fallback.", identifier);
+              table.refresh(); // Ensure we have the latest table state
+              newSchema = table.schema();
+              comparisonAfterMigration = Tuple2.of(newSchema, CompareSchemasVisitor.Result.DATA_CONVERSION_NEEDED);
+            }
+
             LOG.info("Table {} schema updated from {} to {}", identifier, tableSchema, newSchema);
             return comparisonAfterMigration;
           } catch (CommitFailedException e) {
             cache.invalidate(identifier);
             Tuple2<Schema, CompareSchemasVisitor.Result> newSchema =
                 cache.schema(identifier, schema);
+
+            // CRITICAL FIX: Validate schema is not null in catch block too
+            if (newSchema.f0 == null) {
+              LOG.error("CRITICAL: Schema evolution failed and cache returned null schema for table {}. Using table's current schema as fallback.", identifier);
+              table.refresh(); // Ensure we have the latest table state
+              Schema fallbackSchema = table.schema();
+              newSchema = Tuple2.of(fallbackSchema, CompareSchemasVisitor.Result.DATA_CONVERSION_NEEDED);
+            }
+
             if (newSchema.f1 != CompareSchemasVisitor.Result.SCHEMA_UPDATE_NEEDED) {
-              LOG.debug("Table {} schema updated concurrently to {}", identifier, schema);
+              LOG.debug("Table {} schema updated concurrently to {}", identifier, newSchema.f0);
               return newSchema;
             } else {
               LOG.error(
